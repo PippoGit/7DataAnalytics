@@ -6,7 +6,7 @@ import csv
 # output_file: modified file with fixed columns (should be sorted by timestamp)
 
 def parse(input_file, output_file):
-    fieldnames = ["machine", "metric", "timestamp", "value"];
+    fields = ["machine", "metric", "timestamp", "value"]
     rows = []
 
     with open(input_file, 'rb') as csv_file:
@@ -23,11 +23,10 @@ def parse(input_file, output_file):
         rows.sort(key=lambda x: x[2]) #as long as timestamps are standard strings, i just sort em as strings (alotfaster)
 
     with open(output_file, 'w+') as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-
+        writer = csv.DictWriter(csv_file, fieldnames=fields)
         writer.writeheader()
         for row in rows:
-            writer.writerow({"machine":row[0], "metric":row[1], "timestamp":row[2], "value":row[3]})
+            writer.writerow(dict(zip(fields, row)))
 
 # main
 if __name__ == '__main__':
