@@ -25,6 +25,7 @@ def parse(input_file, output_file):
     with open(output_file, 'w+') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fields)
         writer.writeheader()
+        
         for row in rows:
             writer.writerow(dict(zip(fields, row)))
 
