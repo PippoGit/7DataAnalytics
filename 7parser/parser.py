@@ -1,32 +1,35 @@
 import csv
-#import time
+# import time
 
-#parse function
-# input_file: csv source
-# output_file: modified file with fixed columns (should be sorted by timestamp)
 
 def parse(input_file, output_file):
-  fields = ["machine", "metric", "timestamp", "value"]
-  rows = []
+    """
 
-  with open(input_file, 'rb') as csv_file:
-    reader = csv.reader(csv_file, delimiter=',', quotechar='"')
-    next(reader, None)
+    :param input_file: csv source
+    :param output_file: modified file with fixed columns (should be sorted by timestamp)
+    """
+    fields = ["machine", "metric", "timestamp", "value"]
+    rows = []
 
-    for row in reader:
-      id, metric = row[0].split('.')
-      rows.append([id, metric, row[1], row[2]])
+    with open(input_file, 'rb') as csv_file:
+        reader = csv.reader(csv_file, delimiter=',', quotechar='"')
+        next(reader)
 
-    #rows.sort(key=lambda x: time.mktime(time.strptime(x[2],"%Y-%m-%d %H:%M:%S")))
-    rows.sort(key=lambda x: x[2])
+        for row in reader:
+            machine, metric = row[0].split('.')
+            rows.append([machine, metric, row[1], row[2]])
 
-  with open(output_file, 'w+') as csv_file:
-    writer = csv.DictWriter(csv_file, fieldnames=fields)
-    writer.writeheader()
-    
-    for row in rows:
-      writer.writerow(dict(zip(fields, row)))
+        # rows.sort(key=lambda x: time.mktime(time.strptime(x[2],"%Y-%m-%d %H:%M:%S")))
+        rows.sort(key=lambda x: x[2])
+
+    with open(output_file, 'w+') as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=fields)
+        writer.writeheader()
+
+        for row in rows:
+            writer.writerow(dict(zip(fields, row)))
+
 
 # main
 if __name__ == '__main__':
-  parse("csv/fplog.csv", "csv/newlog.csv")
+    parse("csv/fplog.csv", "csv/newlog.csv")
