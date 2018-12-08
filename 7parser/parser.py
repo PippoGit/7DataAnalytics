@@ -1,10 +1,11 @@
 import csv
+import os
 # import time
 
 
 def parse(input_file, output_file):
     """
-
+    function to parse and fix csv file
     :param input_file: csv source
     :param output_file: modified file with fixed columns (should be sorted by timestamp)
     """
@@ -32,4 +33,4 @@ def parse(input_file, output_file):
 
 # main
 if __name__ == '__main__':
-    parse("./csv/fplog.csv", "./csv/newlog.csv")
+    parse("../data/fplog.csv", "../data/newlog.csv")
