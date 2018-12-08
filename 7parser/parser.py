@@ -11,7 +11,7 @@ def parse(input_file, output_file):
     fields = ["machine", "metric", "timestamp", "value"]
     rows = []
 
-    with open(input_file, 'rb') as csv_file:
+    with open(input_file, 'r') as csv_file:
         reader = csv.reader(csv_file, delimiter=',', quotechar='"')
         next(reader)
 
@@ -32,4 +32,4 @@ def parse(input_file, output_file):
 
 # main
 if __name__ == '__main__':
-    parse("csv/fplog.csv", "csv/newlog.csv")
+    parse("./csv/fplog.csv", "./csv/newlog.csv")
