@@ -13,4 +13,4 @@ Thumbs.db
 *.sql
 
 #vscode
-.vscode/*
+.vscode/
