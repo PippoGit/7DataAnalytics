@@ -6,6 +6,7 @@ import os
 def parse(input_file, output_file):
     """
     function to parse and fix csv file
+    
     :param input_file: csv source
     :param output_file: modified file with fixed columns (should be sorted by timestamp)
     """
