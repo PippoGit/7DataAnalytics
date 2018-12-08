@@ -18,9 +18,7 @@ def parse(input_file, output_file):
       rows.append([id, metric, row[1], row[2]])
 
     #rows.sort(key=lambda x: time.mktime(time.strptime(x[2],"%Y-%m-%d %H:%M:%S")))
-    #i think this is kinda useless, timestamps are just ISO strings, so it should be possible to sort em only
-    #by doing dates.sort(), there is no need to parse date.
-    rows.sort(key=lambda x: x[2]) #as long as timestamps are standard strings, i just sort em as strings (alotfaster)
+    rows.sort(key=lambda x: x[2])
 
   with open(output_file, 'w+') as csv_file:
     writer = csv.DictWriter(csv_file, fieldnames=fields)
@@ -31,4 +29,4 @@ def parse(input_file, output_file):
 
 # main
 if __name__ == '__main__':
-  parse("csv/fplog.csv", "csv/newlog.csv")
+  parse("csv/fplog.csv", "csv/newlog.csv") 
