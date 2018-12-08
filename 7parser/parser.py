@@ -30,3 +30,5 @@ def parse(input_file, output_file):
 # main
 if __name__ == '__main__':
   parse("csv/fplog.csv", "csv/newlog.csv") 
+
+  #prova
