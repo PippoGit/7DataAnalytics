@@ -1,7 +1,7 @@
 import csv
+import os
 
-
-def parse(input_file):
+def load_fplog(input_file):
     """
     function to parse and fix csv file. The output will be saved in the script's dir as newlog.csv
     
@@ -16,17 +16,17 @@ def parse(input_file):
 
         for row in reader:
             machine, metric = row[0].split('.')
-            rows.append([machine, metric, row[1], row[2]])
+            rows.append([machine, metric, row[1], int(row[2])])
 
         # rows.sort(key=lambda x: time.mktime(time.strptime(x[2],"%Y-%m-%d %H:%M:%S")))
         rows.sort(key=lambda x: x[2])
 
-    with open("newlog.csv", 'w+') as csv_file:
-        writer = csv.DictWriter(csv_file,  delimiter=',', quotechar='"', quoting=csv.QUOTE_NONNUMERIC, fieldnames=fields)
-        writer.writeheader()
+    # with open("newlog.csv", 'w+') as csv_file:
+    #     writer = csv.DictWriter(csv_file,  delimiter=',', quotechar='"', quoting=csv.QUOTE_NONNUMERIC, fieldnames=fields)
+    #     writer.writeheader()
 
-        for row in rows:
-            writer.writerow(dict(zip(fields, row)))
+    #     for row in rows:
+    #         writer.writerow(dict(zip(fields, row)))
     return [fields, rows]
 
 
@@ -41,30 +41,41 @@ def time2secs(t):
 
 
 
-def parse_date(input_file, date, sel_fields=[], sel_machines=[]):
+def should_write(row, sel_dates=None, sel_fields=None, sel_machines=None):
+    # [r_date, r_time] = row[2].split(' ')
+    return ((sel_fields is None or row[1] in sel_fields) and
+           (sel_machines is None or row[0] in sel_machines) and
+           (sel_dates is None or row[2].split(' ')[0] in sel_dates))
+
+
+def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
     """
     parse and fix csv. Select by Date and attributes
 
     :param input_file: csv source
-    :param date: date to parse
-    :param sel_fields: list of attributes which should be selected (default value ALL)
-    :param sel_machiens: list of machines which should be selected (default value ALL)
+    :param date: date to parse (if None == ALL)
+    :param sel_fields: list of attributes which should be selected (if None == ALL)
+    :param sel_machiens: list of machines which should be selected (if None == ALL)
 
     """
-    [fields, rows] = parse(input_file)
 
-    with open("log" + date + ".csv", "w") as csv_file:
-        writer = csv.DictWriter(csv_file,  delimiter=',', quotechar='"', quoting=csv.QUOTE_NONNUMERIC, fieldnames=fields)
+    [fields, rows] = load_fplog(input_file)
+
+    with open("selected_log.csv", "w") as csv_file:
+        writer = csv.DictWriter(csv_file, quoting=csv.QUOTE_NONNUMERIC, fieldnames=fields)
+
         writer.writeheader()
+        for row in rows:    
+            if(should_write(row, sel_dates, sel_fields, sel_machines)):
+                writer.writerow(dict(zip(fields, row)))     
 
-        for row in rows:
-            if((not sel_fields or row[1] in sel_fields) and
-               (not sel_machines or row[0] in sel_machines)):
-                [r_date, r_time] = row[2].split(' ')
-                if(r_date == date):
-                    writer.writerow({fields[0]: row[0], fields[1]:row[1], fields[2]:int(time2secs(r_time)), fields[3]: int(row[3])})        
+    print("New log at: " + os.getcwd() + "/selected_log.csv\n\n")
+    return
 
 
 # main
 if __name__ == '__main__':
-    parse_date("../data/fplog.csv", "2018-11-19", ['STATISTIC_VEL_ACTUAL'], ['0001'])
+    parse("../data/fplog.csv",      # original file fplog.csv
+          ["2018-11-20"],                     # dates list
+          ['STATISTIC_VEL_ACTUAL'], # vars list
+          ['0001'])                 # machines list
