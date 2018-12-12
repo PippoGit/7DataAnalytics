@@ -68,6 +68,6 @@ def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
 # main
 if __name__ == '__main__':
     parse("../data/fplog.csv",      # original file fplog.csv
-          ["2018-11-20"],                     # dates list
+          ["2018-11-19"],                     # dates list
           ['STATISTIC_VEL_ACTUAL'], # vars list
           ['0001'])                 # machines list
