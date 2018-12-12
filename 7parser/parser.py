@@ -58,7 +58,8 @@ def parse_date(input_file, date, sel_fields=[], sel_machines=[]):
         writer.writeheader()
 
         for row in rows:
-            if((not sel_fields or row[1] in sel_fields) and (not sel_machines or row[0] in sel_machines)):
+            if((not sel_fields or row[1] in sel_fields) and
+               (not sel_machines or row[0] in sel_machines)):
                 [r_date, r_time] = row[2].split(' ')
                 if(r_date == date):
                     writer.writerow({fields[0]: row[0], fields[1]:row[1], fields[2]:int(time2secs(r_time)), fields[3]: int(row[3])})        
