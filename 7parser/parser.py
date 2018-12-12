@@ -13,22 +13,13 @@ def load_fplog(input_file):
     with open(input_file, 'r') as csv_file:
         reader = csv.reader(csv_file, delimiter=',', quotechar='"')
         next(reader)
-
         for row in reader:
             machine, metric = row[0].split('.')
             rows.append([machine, metric, row[1], int(row[2])])
 
-        # rows.sort(key=lambda x: time.mktime(time.strptime(x[2],"%Y-%m-%d %H:%M:%S")))
-        rows.sort(key=lambda x: x[2])
-
-    # with open("newlog.csv", 'w+') as csv_file:
-    #     writer = csv.DictWriter(csv_file,  delimiter=',', quotechar='"', quoting=csv.QUOTE_NONNUMERIC, fieldnames=fields)
-    #     writer.writeheader()
-
-    #     for row in rows:
-    #         writer.writerow(dict(zip(fields, row)))
+    # rows.sort(key=lambda x: time.mktime(time.strptime(x[2],"%Y-%m-%d %H:%M:%S")))
+    rows.sort(key=lambda x: x[2])
     return [fields, rows]
-
 
 
 def time2secs(t):
@@ -40,8 +31,10 @@ def time2secs(t):
     return sum(int(x)*60**pow for pow, x in enumerate(t.split(':')[::-1]))
 
 
-
 def should_write(row, sel_dates=None, sel_fields=None, sel_machines=None):
+    """
+    Returns true if the row should be written on the new log
+    """
     # [r_date, r_time] = row[2].split(' ')
     return ((sel_fields is None or row[1] in sel_fields) and
            (sel_machines is None or row[0] in sel_machines) and
@@ -58,7 +51,6 @@ def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
     :param sel_machiens: list of machines which should be selected (if None == ALL)
 
     """
-
     [fields, rows] = load_fplog(input_file)
 
     with open("selected_log.csv", "w") as csv_file:
