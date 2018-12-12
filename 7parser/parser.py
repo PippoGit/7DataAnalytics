@@ -52,22 +52,39 @@ def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
 
     """
     [fields, rows] = load_fplog(input_file)
-
+    
+    selected_rows = []
     with open("selected_log.csv", "w") as csv_file:
         writer = csv.DictWriter(csv_file, quoting=csv.QUOTE_NONNUMERIC, fieldnames=fields)
 
         writer.writeheader()
         for row in rows:    
             if(should_write(row, sel_dates, sel_fields, sel_machines)):
+                selected_rows.append(row)
                 writer.writerow(dict(zip(fields, row)))     
 
     print("New log at: " + os.getcwd() + "/selected_log.csv\n\n")
-    return
+    return [fields, selected_rows]
 
 
 # main
+def main():
+    # filters to select only a subset of the whole dataset
+    filters = {
+        'sel_dates':    ["2018-11-19", "2018-11-20"],
+        'sel_fields':   ['STATISTIC_VEL_ACTUAL'],
+        'sel_machines': ['0001']
+    }
+
+    # parse output
+    [header, body] = parse("../data/fplog.csv", **filters)
+
+    # testing...
+    print("First row:")
+    print(header)
+    print(body[0])
+    return 0
+
+
 if __name__ == '__main__':
-    parse("../data/fplog.csv",      # original file fplog.csv
-          ["2018-11-19"],                     # dates list
-          ['STATISTIC_VEL_ACTUAL'], # vars list
-          ['0001'])                 # machines list
+    main()
