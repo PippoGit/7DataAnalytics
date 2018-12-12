@@ -78,7 +78,7 @@ def main():
 
     # parse output
     [header, body] = parse("../data/fplog.csv", **filters)
-
+    
     # testing...
     print("First row:")
     print(header)
