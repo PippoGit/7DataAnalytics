@@ -46,7 +46,7 @@ def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
     parse and fix csv. Select by Date and attributes
 
     :param input_file: csv source
-    :param date: date to parse (if None == ALL)
+    :param date: date to parse, yyyy-MM-dd format required. (if None == ALL)
     :param sel_fields: list of attributes which should be selected (if None == ALL)
     :param sel_machiens: list of machines which should be selected (if None == ALL)
 
@@ -72,8 +72,8 @@ def main():
     # filters to select only a subset of the whole dataset
     filters = {
         'sel_dates':    ["2018-11-19", "2018-11-20"],
-        'sel_fields':   ['STATISTIC_VEL_ACTUAL'],
-        'sel_machines': ['0001']
+        'sel_fields':   ["STATISTIC_VEL_ACTUAL"],
+        'sel_machines': ["0001"]
     }
 
     # parse output
