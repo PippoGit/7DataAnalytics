@@ -57,10 +57,10 @@ def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
         writer = csv.DictWriter(csv_file, quoting=csv.QUOTE_NONNUMERIC, fieldnames=fplog[0].keys())
 
         writer.writeheader()
-        for row in fplog:    
+        for row in fplog:
             if(should_write(row, sel_dates, sel_fields, sel_machines)):
                 selected_rows.append(row)
-                writer.writerow(row)     
+                writer.writerow(row)
 
     print("\nLog created!\nPath: " + os.getcwd() + os.sep + output_file + "\n")
     return selected_rows
@@ -81,7 +81,7 @@ def main():
     # testing...
     print("First row:")
     print(log[0])
-    print("Example: \n\tmachine => " + log[0]['machine'] + "\n\ttimestamp => " + log[0]['timestamp']) 
+    print("Example: \n\tmachine => " + log[0]['machine'] + "\n\ttimestamp => " + log[0]['timestamp'])
     return 0
 
 
