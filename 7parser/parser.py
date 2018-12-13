@@ -59,7 +59,7 @@ def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
     selected_rows = [row for row in fplog if should_write(row, sel_dates, sel_fields, sel_machines)]
 
     # *****
-    # Magic Fix (only for iMac):
+    # Magic Fix (only for python 3.3):
     # don't know why but this print is necessary to keep the output ordered
     # print(selected_rows[0]) don't know why but this is required (sometimes) [??????]
     # *****
