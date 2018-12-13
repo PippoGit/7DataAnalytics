@@ -61,12 +61,6 @@ def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
     if(not selected_rows):
         raise Exception("No data found. Maybe you should check your filters.")
 
-    # *****
-    # Magic Fix (only for python 3.3):
-    # don't know why but this print is necessary to keep the output ordered
-    # print(selected_rows[0]) don't know why but this is required [??????]
-    # *****
-
     # crete new csv file
     with open(output_file, "w") as csv_file:
         writer = csv.DictWriter(csv_file, quoting=csv.QUOTE_NONNUMERIC, fieldnames=selected_rows[0].keys())
