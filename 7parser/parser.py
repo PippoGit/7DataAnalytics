@@ -58,6 +58,9 @@ def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
     # select the rows that should be written (from fplog)
     selected_rows = [row for row in fplog if should_write(row, sel_dates, sel_fields, sel_machines)]
 
+    if(not selected_rows):
+        raise Exception("No data found. Check your filters.")
+
     # *****
     # Magic Fix (only for python 3.3):
     # don't know why but this print is necessary to keep the output ordered
@@ -78,7 +81,7 @@ def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
 def main():
     # filters to select only a subset of the whole dataset
     filters = {
-        'sel_dates':    ["2018-11-19", "2018-11-20"],
+        'sel_dates':    ["2018-11-18"],
         'sel_fields':   ["STATISTIC_VEL_ACTUAL"],
         'sel_machines': ["0001"]
     }
