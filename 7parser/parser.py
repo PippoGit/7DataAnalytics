@@ -55,10 +55,13 @@ def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
 
     # select the rows that should be written (from fplog)
     selected_rows = [row for row in fplog if should_write(row, sel_dates, sel_fields, sel_machines)]
-    
+
+    # don't know why but this print is necessary to keep the output ordered (wtf)
+    print(selected_rows[0])
+
     # crete new csv file
     with open(output_file, "w") as csv_file:
-        writer = csv.DictWriter(csv_file, quoting=csv.QUOTE_NONNUMERIC, fieldnames=fplog[0].keys())
+        writer = csv.DictWriter(csv_file, quoting=csv.QUOTE_NONNUMERIC, fieldnames=selected_rows[0].keys())
         writer.writeheader()
         writer.writerows(selected_rows)
 
