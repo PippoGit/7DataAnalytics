@@ -49,12 +49,14 @@ def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
     :param sel_machiens: list of machines which should be selected (To select All set it as 'None')
 
     """
+    # load original dataset fplog.csv
     output_file = "selected_log.csv"
     fplog = load_fplog(input_file)
 
     # select the rows that should be written (from fplog)
     selected_rows = [row for row in fplog if should_write(row, sel_dates, sel_fields, sel_machines)]
     
+    # crete new csv file
     with open(output_file, "w") as csv_file:
         writer = csv.DictWriter(csv_file, quoting=csv.QUOTE_NONNUMERIC, fieldnames=fplog[0].keys())
         writer.writeheader()
