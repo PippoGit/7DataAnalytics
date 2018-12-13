@@ -59,7 +59,7 @@ def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
     selected_rows = [row for row in fplog if should_write(row, sel_dates, sel_fields, sel_machines)]
 
     if(not selected_rows):
-        raise Exception("No data found. Check your filters.")
+        raise Exception("No data found. Maybe you should check your filters.")
 
     # *****
     # Magic Fix (only for python 3.3):
@@ -81,8 +81,8 @@ def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
 def main():
     # filters to select only a subset of the whole dataset
     filters = {
-        'sel_dates':    ["2018-11-19"],
-        'sel_fields':   ["STATISTIC_VEL_ACTUAL"],
+        'sel_dates':    ["2018-12-04"],
+        'sel_fields':   ["STATISTIC_ACC_LEVELACT"],
         'sel_machines': ["0001"]
     }
 
