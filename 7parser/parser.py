@@ -51,10 +51,11 @@ def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
     :param sel_machiens: list of machines which should be selected (if None == ALL)
 
     """
+    output_file = "selected_log.csv"
     [fields, rows] = load_fplog(input_file)
     
     selected_rows = []
-    with open("selected_log.csv", "w") as csv_file:
+    with open(output_file, "w") as csv_file:
         writer = csv.DictWriter(csv_file, quoting=csv.QUOTE_NONNUMERIC, fieldnames=fields)
 
         writer.writeheader()
@@ -63,7 +64,7 @@ def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
                 selected_rows.append(row)
                 writer.writerow(dict(zip(fields, row)))     
 
-    print("New log at: " + os.getcwd() + "/selected_log.csv\n\n")
+    print("\nLog created at!\n" + os.getcwd() + os.sep + output_file + "\n")
     return [fields, selected_rows]
 
 
