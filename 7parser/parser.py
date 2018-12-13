@@ -56,7 +56,7 @@ def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
     # select the rows that should be written (from fplog)
     selected_rows = [row for row in fplog if should_write(row, sel_dates, sel_fields, sel_machines)]
 
-    # don't know why but this print is necessary to keep the output ordered (wtf)
+    # don't know why but this print is necessary to keep the output ordered
     print(selected_rows[0])
 
     # crete new csv file
