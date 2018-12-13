@@ -61,7 +61,7 @@ def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
     # *****
     # Magic Fix (only for python 3.3):
     # don't know why but this print is necessary to keep the output ordered
-    # print(selected_rows[0]) don't know why but this is required (sometimes) [??????]
+    # print(selected_rows[0]) don't know why but this is required [??????]
     # *****
 
     # crete new csv file
