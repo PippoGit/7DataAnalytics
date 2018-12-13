@@ -81,7 +81,7 @@ def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
 def main():
     # filters to select only a subset of the whole dataset
     filters = {
-        'sel_dates':    ["2018-11-18"],
+        'sel_dates':    ["2018-11-19"],
         'sel_fields':   ["STATISTIC_VEL_ACTUAL"],
         'sel_machines': ["0001"]
     }
