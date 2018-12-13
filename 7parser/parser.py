@@ -15,11 +15,11 @@ def load_fplog(input_file):
         next(reader)
         for row in reader:
             machine, metric = row[0].split('.')
-            rows.append([machine, metric, row[1], int(row[2])])
+            rows.append(dict(zip(fields, [machine, metric, row[1], int(row[2])])))
 
     # rows.sort(key=lambda x: time.mktime(time.strptime(x[2],"%Y-%m-%d %H:%M:%S")))
-    rows.sort(key=lambda x: x[2])
-    return [fields, rows]
+    # rows.sort(key=lambda x: x['timestamp'])
+    return sorted(rows, key=lambda k: k['timestamp'])
 
 
 def time2secs(t):
@@ -36,13 +36,14 @@ def should_write(row, sel_dates=None, sel_fields=None, sel_machines=None):
     Returns true if the row should be written on the new log
     """
     # [r_date, r_time] = row[2].split(' ')
-    return ((sel_fields is None or row[1] in sel_fields) and
-           (sel_machines is None or row[0] in sel_machines) and
-           (sel_dates is None or row[2].split(' ')[0] in sel_dates))
+    return ((sel_fields is None or row['metric'] in sel_fields) and
+           (sel_machines is None or row['machine'] in sel_machines) and
+           (sel_dates is None or row['timestamp'].split(' ')[0] in sel_dates))
 
 
 def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
-    """
+    """Returns a list of dictionaries, each containing a selected row.
+    Each element of the list has the following fields: "machine", "timestamp", "metric", "value"
     parse and fix csv. Select by Date and attributes
 
     :param input_file: csv source
@@ -52,20 +53,20 @@ def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
 
     """
     output_file = "selected_log.csv"
-    [fields, rows] = load_fplog(input_file)
-    
+    fplog = load_fplog(input_file)
+
     selected_rows = []
     with open(output_file, "w") as csv_file:
-        writer = csv.DictWriter(csv_file, quoting=csv.QUOTE_NONNUMERIC, fieldnames=fields)
+        writer = csv.DictWriter(csv_file, quoting=csv.QUOTE_NONNUMERIC, fieldnames=fplog[0].keys())
 
         writer.writeheader()
-        for row in rows:    
+        for row in fplog:    
             if(should_write(row, sel_dates, sel_fields, sel_machines)):
                 selected_rows.append(row)
-                writer.writerow(dict(zip(fields, row)))     
+                writer.writerow(row)     
 
-    print("\nLog created at!\n" + os.getcwd() + os.sep + output_file + "\n")
-    return [fields, selected_rows]
+    print("\nLog created!\nPath: " + os.getcwd() + os.sep + output_file + "\n")
+    return selected_rows
 
 
 # main
@@ -78,12 +79,12 @@ def main():
     }
 
     # parse output
-    [header, body] = parse("../data/fplog.csv", **filters)
+    log = parse("../data/fplog.csv", **filters)
     
     # testing...
     print("First row:")
-    print(header)
-    print(body[0])
+    print(log[0])
+    print("Example: \n\tmachine => " + log[0]['machine'] + "\n\ttimestamp => " + log[0]['timestamp']) 
     return 0
 
 
