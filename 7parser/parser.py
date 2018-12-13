@@ -88,8 +88,10 @@ def main():
     
     # testing...
     print("First row:")
-    print(log[0])
-    print("Example: \n\tmachine => " + log[0]['machine'] + "\n\ttimestamp => " + log[0]['timestamp'])
+    print(*log[0].values(), sep=', ')
+
+    print("\nExample: \n\tmachine => " + log[0]['machine'] + "\n\ttimestamp => " + log[0]['timestamp'])
+    print("\n")
     return 0
 
 
