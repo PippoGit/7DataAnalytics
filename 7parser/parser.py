@@ -16,9 +16,6 @@ def load_fplog(input_file):
         for row in reader:
             machine, metric = row[0].split('.')
             rows.append(dict(zip(fields, [machine, metric, row[1], int(row[2])])))
-
-    # rows.sort(key=lambda x: time.mktime(time.strptime(x[2],"%Y-%m-%d %H:%M:%S")))
-    # rows.sort(key=lambda x: x['timestamp'])
     return sorted(rows, key=lambda k: k['timestamp'])
 
 
@@ -44,12 +41,12 @@ def should_write(row, sel_dates=None, sel_fields=None, sel_machines=None):
 def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
     """Returns a list of dictionaries, each containing a selected row.
     Each element of the list has the following fields: "machine", "timestamp", "metric", "value"
-    parse and fix csv. Select by Date and attributes
+    
 
     :param input_file: csv source
-    :param date: date to parse, yyyy-MM-dd format required. (if None == ALL)
-    :param sel_fields: list of attributes which should be selected (if None == ALL)
-    :param sel_machiens: list of machines which should be selected (if None == ALL)
+    :param date: date to parse, yyyy-MM-dd format required. (To select All set it as 'None')
+    :param sel_fields: list of attributes which should be selected (To select All set it as 'None')
+    :param sel_machiens: list of machines which should be selected (To select All set it as 'None')
 
     """
     output_file = "selected_log.csv"
