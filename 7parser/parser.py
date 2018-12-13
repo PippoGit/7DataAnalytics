@@ -19,6 +19,7 @@ def load_fplog(input_file):
     return sorted(rows, key=lambda k: k['timestamp'])
 
 
+# **** kinda useless 
 def time2secs(t):
     """
     convert timestamp to seconds (starting from 1)
@@ -26,6 +27,7 @@ def time2secs(t):
     :param t: timestamp HH:MM:SS
     """
     return sum(int(x)*60**pow for pow, x in enumerate(t.split(':')[::-1]))
+# *****
 
 
 def should_write(row, sel_dates=None, sel_fields=None, sel_machines=None):
@@ -56,8 +58,11 @@ def parse(input_file, sel_dates=None, sel_fields=None, sel_machines=None):
     # select the rows that should be written (from fplog)
     selected_rows = [row for row in fplog if should_write(row, sel_dates, sel_fields, sel_machines)]
 
+    # *****
+    # Magic Fix (only for iMac):
     # don't know why but this print is necessary to keep the output ordered
     # print(selected_rows[0]) don't know why but this is required (sometimes) [??????]
+    # *****
 
     # crete new csv file
     with open(output_file, "w") as csv_file:
