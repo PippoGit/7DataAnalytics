@@ -3,8 +3,7 @@ import os
 import datetime
 
 def load_with_shift(machine_id, first_year=2018, first_month=11, first_day=15):
-    """
-    function to parse status log of machine (log file must be in data/status_log/biweekly/machineID.csv)
+    """Function to parse status log of machine (log file must be in data/status_log/biweekly/machineID.csv)
     and to append two columns: DATE and SHIFT. Default first date is 2018-11-15
 
     :param machine_id: number of machine
@@ -30,8 +29,7 @@ def load_with_shift(machine_id, first_year=2018, first_month=11, first_day=15):
 
 
 def write_log(machine_id, log):
-    """Returns a list of dictionaries, each containing a selected row.
-    Create the new log for machine number machine_id    
+    """Create the new log for machine number machine_id    
 
     :param machine id: number of machine
     :param log: log file extended with shift and date
