@@ -8,22 +8,25 @@ def load_with_shift(machine_id, first_year=2018, first_month=11, first_day=15):
 
     :param machine_id: number of machine
     """
-    fields = ["TIMESTAMP", "VELOCITY", "STATUS", "DATE", "SHIFT"]
-    rows = []
     input_file = "../data/status_log/biweekly/machine" + machine_id + ".csv"
+    fields = ["TIMESTAMP", "VELOCITY", "STATUS", "DATE_SHIFT"]
+    rows = []
 
+    # first date used to evaluate working_date
     first_date = datetime.datetime(first_year, first_month, first_day)
 
     with open(input_file, 'r') as csv_file:
         reader = csv.reader(csv_file, delimiter=',', quotechar='"')
         next(reader)
         for row in reader:
+            # Get date for i-th entry
             currdate = datetime.datetime.strptime(row[0], "%d-%b-%Y %H:%M:%S")
-
+            # evaluate the right shift value (1 => 06->14, 2 => 14->22, 3 => 22->06)
             shift = 1 if (currdate.hour in range(6,14)) else (2 if currdate.hour in range(14,22) else 3)
+            # evaluate the working date (first day is number 0)
             working_date = abs(currdate - first_date).days + (0 if (shift == 3 and currdate.hour < 22) else 1)
-    
-            rows.append(dict(zip(fields, [*row, working_date, shift])))
+            # add the extended row to the dictionary
+            rows.append(dict(zip(fields, [*row, str(working_date).zfill(3)+ "_" +str(shift)])))
 
     return rows
 
@@ -48,7 +51,7 @@ def write_log(machine_id, log):
 
 # main
 def main():
-    # filters to select only a subset of the whole dataset
+    # we are not going to use machine 3
     machines = ["1", "2", "4"]
 
     for machine in machines:
