@@ -90,19 +90,17 @@ def main():
     aggregated = aggregate(log)
 
     bestDays = get_best_days(5, aggregated)
-    day_indices = []
+    day_indices = [d[0] for d in bestDays]
     
     print("Best days: ")
     print(["DATE", "OEE", "NORMAL_FREQUENCY", "QUALITY_PERC"])
-    for d in bestDays:
-      print(d)
-      day_indices.append(d[0])
+    print(*[d for d in bestDays], sep='\n')
+
     
     print("Best shift: ")
     print(["DATE_SHIFT", "AVG_VELOCITY","LOG_PRODUCED","LOG_REJECTED","DOWNTIME","TOTAL_TIME", "START_TIME", "END_TIME", "OEE", "NORMAL_FREQUENCY", "QUALITY_PERC"])
     bestShift = get_best_shift(5, day_indices)
-    for s in bestShift:
-      print(s)
+    print(*[s for s in bestShift], sep='\n')
 
     return 0
 
