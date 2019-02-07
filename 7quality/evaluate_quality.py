@@ -84,6 +84,14 @@ def get_best_shift(k, indices):
         logs.append([*row, round( (float(row[5])+float(row[4]))/2, 2)])
 
   best = sorted(logs, key=itemgetter(6, 5), reverse=True)
+
+  with open("best_shift.csv", "w") as csv_output:
+    writer = csv.writer(csv_output, quoting=csv.QUOTE_NONNUMERIC)
+    writer.writerow(["DATE_SHIFT", "AVG_VELOCITY","LOG_PRODUCED","LOG_REJECTED", "OEE", "NORMAL_FREQUENCY", "QUALITY_PERC"])
+
+    for s in best:
+      writer.writerow(s)
+
   return best[0:k]
 
 # main
@@ -100,7 +108,7 @@ def main():
     
     print("Best shift: ")
     print(["DATE_SHIFT", "AVG_VELOCITY","LOG_PRODUCED","LOG_REJECTED", "OEE", "NORMAL_FREQUENCY", "QUALITY_PERC"])
-    bestShift = get_best_shift(5, day_indices)
+    bestShift = get_best_shift(200, day_indices)
     print(*[s for s in bestShift], sep='\n')
 
     return 0
