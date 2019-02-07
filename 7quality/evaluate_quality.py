@@ -4,7 +4,7 @@ import datetime
 from operator import itemgetter
 
 def merge_frequency_oee(machine_id, first_year=2018, first_month=11, first_day=15):
-    fields = ["DATE_SHIFT", "AVG_VELOCITY","LOG_PRODUCED","LOG_REJECTED","DOWNTIME","TOTAL_TIME", "START_TIME", "END_TIME", "OEE", "NORMAL_FREQUENCY"],
+    fields = ["DATE_SHIFT", "AVG_VELOCITY","LOG_PRODUCED","LOG_REJECTED", "OEE", "NORMAL_FREQUENCY"],
 
     quality_file = "../data/quality_log/machine" + machine_id + "_shiftquality.csv"
     freq_file    = "../data/quality_log/machine" + machine_id + "_shiftfrequency.csv"
@@ -25,7 +25,7 @@ def merge_frequency_oee(machine_id, first_year=2018, first_month=11, first_day=1
         for row in readerqual:
           currdate = datetime.datetime.strptime(row[5], "%d-%b-%Y %H:%M:%S")
           if (currdate > first_date):
-            list_qual.append(row)
+            list_qual.append([*row[0:3], *row[7:9]])
 
     with open("merged.csv", "w") as csv_merged:
         writer = csv.writer(csv_merged, quoting=csv.QUOTE_NONNUMERIC)
@@ -50,8 +50,8 @@ def aggregate(log):
     for i in range(0, len(log)-2, 3):
       aggregated.append([round(float(log[i][2]) + float(log[i+1][2]) + float(log[i+2][2]), 2),
                          round(float(log[i][3]) + float(log[i+1][3]) + float(log[i+2][3]), 2),
-                         round((float(log[i][8]) + float(log[i+1][8]) + float(log[i+2][8]))/3, 2), 
-                         round((float(log[i][9]) + float(log[i+1][9]) + float(log[i+2][9]))/3, 2)])
+                         round((float(log[i][4]) + float(log[i+1][4]) + float(log[i+2][4]))/3, 2), 
+                         round((float(log[i][5]) + float(log[i+1][5]) + float(log[i+2][5]))/3, 2)])
 
     with open(output_file, "w") as csv_aggregated:
         writer = csv.writer(csv_aggregated, quoting=csv.QUOTE_NONNUMERIC)
@@ -81,9 +81,9 @@ def get_best_shift(k, indices):
     for row in reader:
       curr_date = int(row[0].split(".")[0])
       if(curr_date in indices):
-        logs.append([*row, round(float(row[9])+float(row[8])/2, 2)])
+        logs.append([*row, round(float(row[5])+float(row[4])/2, 2)])
 
-  best = sorted(logs, key=itemgetter(10, 9), reverse=True)
+  best = sorted(logs, key=itemgetter(6, 5), reverse=True)
   return best[0:k]
 
 # main
@@ -99,7 +99,7 @@ def main():
     print(*[d for d in bestDays], sep='\n')
     
     print("Best shift: ")
-    print(["DATE_SHIFT", "AVG_VELOCITY","LOG_PRODUCED","LOG_REJECTED","DOWNTIME","TOTAL_TIME", "START_TIME", "END_TIME", "OEE", "NORMAL_FREQUENCY", "QUALITY_PERC"])
+    print(["DATE_SHIFT", "AVG_VELOCITY","LOG_PRODUCED","LOG_REJECTED", "OEE", "NORMAL_FREQUENCY", "QUALITY_PERC"])
     bestShift = get_best_shift(5, day_indices)
     print(*[s for s in bestShift], sep='\n')
 
