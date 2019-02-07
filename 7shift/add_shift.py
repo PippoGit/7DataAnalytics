@@ -2,7 +2,7 @@ import csv
 import os
 import datetime
 
-def load_best_fplog(machine_id, best_shift):
+def load_fplog_for_shift(machine_id, shift):
     input_file = "machine" + machine_id + ".csv"
     fields = ["TIMESTAMP", "VELOCITY", "STATUS", "DATE_SHIFT"]
     rows = []
@@ -11,7 +11,7 @@ def load_best_fplog(machine_id, best_shift):
         reader = csv.reader(csv_file, delimiter=',', quotechar='"')
         next(reader)
         for row in reader:
-            if row[3] == best_shift:
+            if row[3] == shift:
                 rows.append(row)
 
     with open("best_shift_log.csv", "w") as csv_file:
@@ -79,8 +79,7 @@ def main():
       log = load_with_shift(machine)
       write_log(machine, log)
     
-    load_best_fplog("4", "001_3")
-
+    load_fplog_for_shift("4", "001_3")
     return 0
 
 
