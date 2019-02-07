@@ -44,11 +44,13 @@ def aggregate(log):
     output_file = "aggregated_daily.csv"
     aggregated = []
     rows = []
-    fields = ["DATE", "OEE", "NORMAL_FREQUENCY", "QUALITY_PERC"]
+    fields = ["DATE", "PRODUCTION", "REJECTED", "OEE", "NORMAL_FREQUENCY", "QUALITY_PERC"]
     
     # crete new csv file
     for i in range(0, len(log)-2, 3):
-      aggregated.append([round((float(log[i][8]) + float(log[i+1][8]) + float(log[i+2][8]))/3, 2), 
+      aggregated.append([round(float(log[i][2]) + float(log[i+1][2]) + float(log[i+2][2]), 2),
+                         round(float(log[i][3]) + float(log[i+1][3]) + float(log[i+2][3]), 2),
+                         round((float(log[i][8]) + float(log[i+1][8]) + float(log[i+2][8]))/3, 2), 
                          round((float(log[i][9]) + float(log[i+1][9]) + float(log[i+2][9]))/3, 2)])
 
     with open(output_file, "w") as csv_aggregated:
@@ -56,7 +58,7 @@ def aggregate(log):
         writer.writerow(fields)
 
         for i in range(0, len(aggregated)):
-          row = [i+1, *aggregated[i], round((aggregated[i][0]+aggregated[i][1])/2, 2)]
+          row = [i+1, *aggregated[i], round((aggregated[i][2]+aggregated[i][3])/2, 2)]
           rows.append(row)
           writer.writerow(row)
 
@@ -64,7 +66,7 @@ def aggregate(log):
     return rows
 
 def get_best_days(k, log):
-  best = sorted(log, key=itemgetter(3, 2), reverse=True)
+  best = sorted(log, key=itemgetter(5, 4), reverse=True)
   return best[0:k]
 
 
@@ -93,9 +95,8 @@ def main():
     day_indices = [d[0] for d in bestDays]
     
     print("Best days: ")
-    print(["DATE", "OEE", "NORMAL_FREQUENCY", "QUALITY_PERC"])
+    print(["DATE", "PRODUCTION", "REJECTED", "OEE", "NORMAL_FREQUENCY", "QUALITY_PERC"])
     print(*[d for d in bestDays], sep='\n')
-
     
     print("Best shift: ")
     print(["DATE_SHIFT", "AVG_VELOCITY","LOG_PRODUCED","LOG_REJECTED","DOWNTIME","TOTAL_TIME", "START_TIME", "END_TIME", "OEE", "NORMAL_FREQUENCY", "QUALITY_PERC"])
