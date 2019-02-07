@@ -52,7 +52,7 @@ def aggregate(log):
                          round(float(log[i][3]) + float(log[i+1][3]) + float(log[i+2][3]), 2),
                          round((float(log[i][4]) + float(log[i+1][4]) + float(log[i+2][4]))/3, 2), 
                          round((float(log[i][5]) + float(log[i+1][5]) + float(log[i+2][5]))/3, 2)])
-
+  
     with open(output_file, "w") as csv_aggregated:
         writer = csv.writer(csv_aggregated, quoting=csv.QUOTE_NONNUMERIC)
         writer.writerow(fields)
@@ -81,7 +81,7 @@ def get_best_shift(k, indices):
     for row in reader:
       curr_date = int(row[0].split(".")[0])
       if(curr_date in indices):
-        logs.append([*row, round(float(row[5])+float(row[4])/2, 2)])
+        logs.append([*row, round( (float(row[5])+float(row[4]))/2, 2)])
 
   best = sorted(logs, key=itemgetter(6, 5), reverse=True)
   return best[0:k]
