@@ -108,7 +108,7 @@ def main():
     
     print("Best shift: ")
     print(["DATE_SHIFT", "AVG_VELOCITY","LOG_PRODUCED","LOG_REJECTED", "OEE", "NORMAL_FREQUENCY", "QUALITY_PERC"])
-    bestShift = get_best_shift(200, day_indices)
+    bestShift = get_best_shift(5, day_indices)
     print(*[s for s in bestShift], sep='\n')
 
     return 0
