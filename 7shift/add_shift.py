@@ -2,6 +2,27 @@ import csv
 import os
 import datetime
 
+def load_best_fplog(machine_id, best_shift):
+    input_file = "machine" + machine_id + ".csv"
+    fields = ["TIMESTAMP", "VELOCITY", "STATUS", "DATE_SHIFT"]
+    rows = []
+
+    with open(input_file, 'r') as csv_file:
+        reader = csv.reader(csv_file, delimiter=',', quotechar='"')
+        next(reader)
+        for row in reader:
+            if row[3] == best_shift:
+                rows.append(row)
+
+    with open("best_shift_log.csv", "w") as csv_file:
+        writer = csv.writer(csv_file, quoting=csv.QUOTE_NONNUMERIC)
+        writer.writerow(fields)
+        for row in rows:
+            writer.writerow(row)
+
+    return rows
+
+
 def load_with_shift(machine_id, first_year=2018, first_month=11, first_day=15):
     """Function to parse status log of machine (log file must be in data/status_log/biweekly/machineID.csv)
     and to append two columns: DATE and SHIFT. Default first date is 2018-11-15
@@ -57,7 +78,9 @@ def main():
     for machine in machines:
       log = load_with_shift(machine)
       write_log(machine, log)
-      
+    
+    load_best_fplog("4", "001_3")
+
     return 0
 
 
