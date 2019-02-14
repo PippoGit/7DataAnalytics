@@ -99,16 +99,16 @@ def main():
     log = merge_frequency_oee("2")
     aggregated = aggregate(log)
 
-    bestDays = get_best_days(5, aggregated)
+    bestDays = get_best_days(50, aggregated)
     day_indices = [d[0] for d in bestDays]
     
-    print("Best days: ")
+    print("\nBest days: ")
     print(["DATE", "PRODUCTION", "REJECTED", "OEE", "NORMAL_FREQUENCY", "QUALITY_PERC"])
     print(*[d for d in bestDays], sep='\n')
     
-    print("Best shift: ")
+    print("\nBest shift: ")
     print(["DATE_SHIFT", "AVG_VELOCITY","LOG_PRODUCED","LOG_REJECTED", "OEE", "NORMAL_FREQUENCY", "QUALITY_PERC"])
-    bestShift = get_best_shift(5, day_indices)
+    bestShift = get_best_shift(50, day_indices)
     print(*[s for s in bestShift], sep='\n')
 
     return 0
