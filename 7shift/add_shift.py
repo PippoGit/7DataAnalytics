@@ -44,7 +44,6 @@ def load_with_shift(machine_id, first_year=2018, first_month=11, first_day=1):
         for row in reader:
             # Get date for i-th entry
             currdate = datetime.datetime.strptime(row[0], "%d-%b-%Y %H:%M:%S")
-            print(currdate)
             # evaluate the right shift value (1 => 06->14, 2 => 14->22, 3 => 22->06)
             shift = 1 if (currdate.hour in range(6,14)) else (2 if currdate.hour in range(14,22) else 3)
             # evaluate the working date (first day is number 0)
