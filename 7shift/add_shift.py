@@ -4,7 +4,7 @@ import datetime
 
 def load_fplog_for_shift(machine_id, shift):
     input_file = "machine" + machine_id + ".csv"
-    fields = ["TIMESTAMP", "VELOCITY", "STATUS", "DATE_SHIFT"]
+    fields = ["TIMESTAMP", "NODATA", "STATUS", "VELOCITY", "DATE_SHIFT"] # TIMESTAMP,NODATA,CASE,STATUS
     output_file = "best_shift_log.csv"
     rows = []
 
@@ -25,6 +25,11 @@ def load_fplog_for_shift(machine_id, shift):
     return rows
 
 
+def status_name(id):
+    names = ["_", 'NODATA', 'STEADYSTOP', 'STOP', 'STEADYRESTART', 'RESTART', 'STEADYDELAY', 'DELAY', 'STEADYRISING', 'RISING', 'STEADYNORMAL', 'NORMAL', 'PERSISTENTNODATA', 'PERSISTENTSTEADYSTOP', 'PERSISTENTSTOP', 'PERSISTENTSTEADYRESTART', 'PERSISTENTRESTART', 'PERSISTENTSTEADYDELAY', 'PERSISTENTDELAY', 'PERSISTENTSTEADYRISING', 'PERSISTENTRISING', 'PERSISTENTSTEADYNORMAL', 'PERSISTENTNORMAL']
+    return names[int(id)]
+
+
 def load_with_shift(machine_id, first_year=2018, first_month=11, first_day=1):
     """Function to parse status log of machine (log file must be in data/status_log/biweekly/machineID.csv)
     and to append two columns: DATE and SHIFT. Default first date is 2018-11-01
@@ -32,7 +37,7 @@ def load_with_shift(machine_id, first_year=2018, first_month=11, first_day=1):
     :param machine_id: number of machine
     """
     input_file = "../data/status_log/monthly/machine" + machine_id + ".csv"
-    fields = ["TIMESTAMP", "VELOCITY", "STATUS", "DATE_SHIFT"]
+    fields = ["TIMESTAMP", "NODATA", "STATUS", "VELOCITY", "DATE_SHIFT"] # TIMESTAMP,NODATA,CASE,STATUS
     rows = []
 
     # first date used to evaluate working_date
@@ -43,13 +48,13 @@ def load_with_shift(machine_id, first_year=2018, first_month=11, first_day=1):
         next(reader)
         for row in reader:
             # Get date for i-th entry
-            currdate = datetime.datetime.strptime(row[0], "%d-%b-%Y %H:%M:%S")
+            currdate = datetime.datetime.strptime(row[0], "%Y-%m-%dT%H:%M:%S")
             # evaluate the right shift value (1 => 06->14, 2 => 14->22, 3 => 22->06)
             shift = 1 if (currdate.hour in range(6,14)) else (2 if currdate.hour in range(14,22) else 3)
             # evaluate the working date (first day is number 0)
             working_date = abs(currdate - first_date).days + (0 if (shift == 3 and currdate.hour < 22) else 1)
             # add the extended row to the dictionary
-            rows.append(dict(zip(fields, [*row[0:1], row[3], str(working_date).zfill(3)+ "_" +str(shift)])))
+            rows.append(dict(zip(fields, [*row[0:1], status_name(row[3]), row[4] if row[4]!= 'NaN' else '-1', str(working_date).zfill(3)+ "_" +str(shift)])))
 
     return rows
 
@@ -81,7 +86,7 @@ def main():
       log = load_with_shift(machine)
       write_log(machine, log)
     
-    load_fplog_for_shift("4", "001_3")
+    # load_fplog_for_shift("4", "001_3")
     return 0
 
 
