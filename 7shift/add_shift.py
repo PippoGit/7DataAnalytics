@@ -4,7 +4,7 @@ import datetime
 
 def load_fplog_for_shift(machine_id, shift):
     input_file = "machine" + machine_id + ".csv"
-    fields = ["TIMESTAMP", "NODATA", "STATUS", "VELOCITY", "DATE_SHIFT"] # TIMESTAMP,NODATA,CASE,STATUS
+    fields = ["TIMESTAMP", "NODATA", "STATUS", "VELOCITY", "DATE_SHIFT"]
     output_file = "best_shift_log.csv"
     rows = []
 
@@ -26,8 +26,8 @@ def load_fplog_for_shift(machine_id, shift):
 
 
 def status_name(id):
-    names = ["_", 'NODATA', 'STEADYSTOP', 'STOP', 'STEADYRESTART', 'RESTART', 'STEADYDELAY', 'DELAY', 'STEADYRISING', 'RISING', 'STEADYNORMAL', 'NORMAL', 'PERSISTENTNODATA', 'PERSISTENTSTEADYSTOP', 'PERSISTENTSTOP', 'PERSISTENTSTEADYRESTART', 'PERSISTENTRESTART', 'PERSISTENTSTEADYDELAY', 'PERSISTENTDELAY', 'PERSISTENTSTEADYRISING', 'PERSISTENTRISING', 'PERSISTENTSTEADYNORMAL', 'PERSISTENTNORMAL']
-    return names[int(id)]
+    names = ['NO DATA', 'STEADY STOP', 'STOP', 'STEADY RESTART', 'RESTART', 'STEADY DELAY', 'DELAY', 'STEADY RISING', 'RISING', 'STEADY NORMAL', 'NORMAL', 'PERSISTENT NODATA', 'PERSISTENT STEADY STOP', 'PERSISTENT STOP', 'PERSISTENT STEADY RESTART', 'PERSISTENT RESTART', 'PERSISTENT STEADY DELAY', 'PERSISTENT DELAY', 'PERSISTENT STEADY RISING', 'PERSISTENT RISING', 'PERSISTENT STEADY NORMAL', 'PERSISTENT NORMAL']
+    return names[int(id)-1]
 
 
 def load_with_shift(machine_id, first_year=2018, first_month=11, first_day=1):
@@ -37,7 +37,7 @@ def load_with_shift(machine_id, first_year=2018, first_month=11, first_day=1):
     :param machine_id: number of machine
     """
     input_file = "../data/status_log/monthly/machine" + machine_id + ".csv"
-    fields = ["TIMESTAMP", "NODATA", "STATUS", "VELOCITY", "DATE_SHIFT"] # TIMESTAMP,NODATA,CASE,STATUS
+    fields = ["TIMESTAMP", "NODATA", "STATUS", "VELOCITY", "DATE_SHIFT"] # NEL CSV ORA CI SONO: TIMESTAMP,NODATA,CASE,STATUS,VELOCITY
     rows = []
 
     # first date used to evaluate working_date
@@ -81,10 +81,10 @@ def write_log(machine_id, log):
 def main():
     # we are not going to use machine 3
     machines = ["1", "2", "4"]
-
+    
     for machine in machines:
-      log = load_with_shift(machine)
-      write_log(machine, log)
+        log = load_with_shift(machine)
+        write_log(machine, log)
     
     # load_fplog_for_shift("4", "001_3")
     return 0
