@@ -54,7 +54,9 @@ def load_with_shift(machine_id, first_year=2018, first_month=11, first_day=1):
             # evaluate the working date (first day is number 0)
             working_date = abs(currdate - first_date).days + (0 if (shift == 3 and currdate.hour < 22) else 1)
             # add the extended row to the dictionary
-            rows.append(dict(zip(fields, [*row[0:1], status_name(row[3]), row[4] if row[4]!= 'NaN' else '-1', str(working_date).zfill(3)+ "_" +str(shift)])))
+            date_shift = str(working_date).zfill(3)+ "_" + str(shift)
+            velocity = row[4] if row[4]!= 'NaN' else '-1'
+            rows.append(dict(zip(fields, [*row[0:1], status_name(row[3]), velocity, date_shift])))
 
     return rows
 
