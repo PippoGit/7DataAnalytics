@@ -56,7 +56,7 @@ def load_with_shift(machine_id, first_year=2018, first_month=11, first_day=1):
             # add the extended row to the dictionary
             date_shift = str(working_date).zfill(3)+ "_" + str(shift)
             velocity = row[4].replace('NaN', '-1')
-            rows.append(dict(zip(fields, [*row[0:1], status_name(row[3]), velocity, date_shift])))
+            rows.append(dict(zip(fields, [*row[0:2], status_name(row[3]), velocity, date_shift])))
 
     return rows
 

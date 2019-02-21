@@ -11,6 +11,7 @@ Thumbs.db
 # csv and data
 *.csv
 *.sql
+*.zip
 
 #vscode
 .vscode/*
