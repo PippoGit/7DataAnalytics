@@ -4,7 +4,7 @@ import datetime
 
 def load_fplog_for_shift(machine_id, shift):
     input_file = "machine" + machine_id + ".csv"
-    fields = ["TIMESTAMP", "NODATA", "STATUS", "VELOCITY", "DATE_SHIFT"]
+    fields = ["TIMESTAMP", "NODATA", "STATUS", "DATE_SHIFT"]
     output_file = "best_shift_log.csv"
     rows = []
 
@@ -26,6 +26,8 @@ def load_fplog_for_shift(machine_id, shift):
 
 
 def status_name(id):
+    if (id == 'NaN'): 
+        return 'NO DATA'
     names = ['NO DATA', 'STEADY STOP', 'STOP', 'STEADY RESTART', 'RESTART', 'STEADY DELAY', 'DELAY', 'STEADY RISING', 'RISING', 'STEADY NORMAL', 'NORMAL', 'PERSISTENT NODATA', 'PERSISTENT STEADY STOP', 'PERSISTENT STOP', 'PERSISTENT STEADY RESTART', 'PERSISTENT RESTART', 'PERSISTENT STEADY DELAY', 'PERSISTENT DELAY', 'PERSISTENT STEADY RISING', 'PERSISTENT RISING', 'PERSISTENT STEADY NORMAL', 'PERSISTENT NORMAL']
     return names[int(id)-1]
 
@@ -65,7 +67,7 @@ def load_with_shift(machine_id, first_year=2018, first_month=11, first_day=1):
     :param machine_id: number of machine
     """
     input_file = "../data/status_log/monthly/machine" + machine_id + ".csv"
-    fields = ["TIMESTAMP", "NODATA", "STATUS", "VELOCITY", "DATE_SHIFT"] # NEL CSV ORA CI SONO: TIMESTAMP,NODATA,CASE,STATUS,VELOCITY
+    fields = ["TIMESTAMP", "NODATA", "STATUS", "DATE_SHIFT"] # NEL CSV ORA CI SONO: TIMESTAMP,NODATA,CASE,STATUS,VELOCITY
     rows = []
 
     # first date used to evaluate working_date
@@ -83,8 +85,10 @@ def load_with_shift(machine_id, first_year=2018, first_month=11, first_day=1):
             working_date = abs(currdate - first_date).days + (0 if (shift == 3 and currdate.hour < 22) else 1)
             # add the extended row to the dictionary
             date_shift = str(working_date).zfill(3)+ "_" + str(shift)
-            velocity = row[4].replace('NaN', '-1')
-            rows.append(dict(zip(fields, [*row[0:2], get_adjusted_status(machine_id, row[3]), velocity, date_shift])))
+            # velocity = row[4].replace('NaN', '0')
+            if(row[2] in ['NaN', '1', '12']): # SKIP NO DATA!!!
+                continue
+            rows.append(dict(zip(fields, [*row[0:2], status_name(row[2]), date_shift])))
 
     return rows
 
