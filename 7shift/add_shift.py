@@ -5,14 +5,14 @@ import datetime
 def load_fplog_for_shift(machine_id, shift):
     input_file = "machine" + machine_id + ".csv"
     fields = ["TIMESTAMP", "NODATA", "STATUS", "DATE_SHIFT"]
-    output_file = "best_shift_log.csv"
+    output_file = "machine" + machine_id + "best_shift_log.csv"
     rows = []
 
     with open(input_file, 'r') as csv_file:
         reader = csv.reader(csv_file, delimiter=',', quotechar='"')
         next(reader)
         for row in reader:
-            if row[3] == shift:
+            if row[3] in shift:
                 rows.append(row)
 
     with open(output_file, "w") as csv_file:
@@ -119,10 +119,9 @@ def main():
     
     for machine in machines:
         log = load_with_shift(machine)
-        # log = map_status(machine, log)
         write_log(machine, log)
     
-    # load_fplog_for_shift("4", "001_3")
+    load_fplog_for_shift("2", ["001_2", "006_2", "007_1", "007_2", "010_3", "014_1", "018_1", "024_3", "026_2", "030_2"])
     return 0
 
 
