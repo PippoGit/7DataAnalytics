@@ -77,6 +77,8 @@ def load_with_shift(machine_id, first_year=2018, first_month=11, first_day=1):
         reader = csv.reader(csv_file, delimiter=',', quotechar='"')
         next(reader)
         for row in reader:
+            if(row[2] in ['NaN', '1', '12']): # SKIP NO DATA!!!
+                continue
             # Get date for i-th entry
             currdate = datetime.datetime.strptime(row[0], "%Y-%m-%dT%H:%M:%S")
             # evaluate the right shift value (1 => 06->14, 2 => 14->22, 3 => 22->06)
@@ -85,9 +87,7 @@ def load_with_shift(machine_id, first_year=2018, first_month=11, first_day=1):
             working_date = abs(currdate - first_date).days + (0 if (shift == 3 and currdate.hour < 22) else 1)
             # add the extended row to the dictionary
             date_shift = str(working_date).zfill(3)+ "_" + str(shift)
-            # velocity = row[4].replace('NaN', '0')
-            if(row[2] in ['NaN', '1', '12']): # SKIP NO DATA!!!
-                continue
+            # put all together and map the status to the correct one
             rows.append(dict(zip(fields, [*row[0:2], get_adjusted_status(machine_id, row[2]), date_shift])))
 
     return rows
