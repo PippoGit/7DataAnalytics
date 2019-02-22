@@ -33,7 +33,7 @@ def status_name(id):
 def get_adjusted_status(machine_id, status_id):
     status_maps = {
         'NO DATA'                   : {'1':'NO DATA',                '2':'NO DATA',                '4':'NO DATA'},
-        'STEADY STOP'               : {'1':'STEADY STOP',            '2':'STEADY STOP',            '4':'STEADY STOP'},
+        'STEADY STOP'               : {'1':'STEADY STOP',            '2':'STOP',                   '4':'STEADY STOP'},
         'STOP'                      : {'1':'STOP',                   '2':'STOP',                   '4':'STOP'},
         'STEADY RESTART'            : {'1':'STEADY RESTART',         '2':'STEADY RESTART',         '4':'STEADY RESTART'},
         'RESTART'                   : {'1':'RESTART',                '2':'RESTART',                '4':'RESTART'}, 
@@ -47,11 +47,11 @@ def get_adjusted_status(machine_id, status_id):
         'PERSISTENT STEADY STOP'    : {'1':'PERSISTENT STEADY STOP', '2':'PERSISTENT STEADY STOP', '4':'STOP'},
         'PERSISTENT STOP'           : {'1':'PERSISTENT STOP',        '2':'PERSISTENT STOP',        '4':'PERSISTENT STOP'},
         'PERSISTENT STEADY RESTART' : {'1':'STEADY RESTART',         '2':'STEADY RESTART',         '4':'RESTART'},
-        'PERSISTENT RESTART'        : {'1':'PERSISTENT RESTART',     '2':'PERSISTENT RESTART',     '4':'PERSISTENT RESTART'},
+        'PERSISTENT RESTART'        : {'1':'PERSISTENT RESTART',     '2':'RESTART',                '4':'PERSISTENT RESTART'},
         'PERSISTENT STEADY DELAY'   : {'1':'STEADY DELAY',           '2':'STEADY DELAY',           '4':'DELAY'},
         'PERSISTENT DELAY'          : {'1':'PERSISTENT DELAY',       '2':'PERSISTENT DELAY',       '4':'PERSISTENT DELAY'},
         'PERSISTENT STEADY RISING'  : {'1':'RISING',                 '2':'RISING',                 '4':'RISING'},
-        'PERSISTENT RISING'         : {'1':'PERSISTENT RISING',      '2':'PERSISTENT RISING',      '4':'PERSISTENT RISING'},
+        'PERSISTENT RISING'         : {'1':'PERSISTENT RISING',      '2':'RISING',                 '4':'PERSISTENT RISING'},
         'PERSISTENT STEADY NORMAL'  : {'1':'NORMAL',                 '2':'NORMAL',                 '4':'PERSISTENT STEADY NORMAL'},
         'PERSISTENT NORMAL'         : {'1':'PERSISTENT NORMAL',      '2':'PERSISTENT NORMAL',      '4':'PERSISTENT NORMAL'}
     }
