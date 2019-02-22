@@ -34,28 +34,28 @@ def status_name(id):
 
 def get_adjusted_status(machine_id, status_id):
     status_maps = {
-        'NO DATA'                   : {'1':'NO DATA',                '2':'NO DATA',                '4':'NO DATA'},
-        'STEADY STOP'               : {'1':'STEADY STOP',            '2':'STOP',                   '4':'STEADY STOP'},
-        'STOP'                      : {'1':'STOP',                   '2':'STOP',                   '4':'STOP'},
-        'STEADY RESTART'            : {'1':'STEADY RESTART',         '2':'STEADY RESTART',         '4':'STEADY RESTART'},
-        'RESTART'                   : {'1':'RESTART',                '2':'RESTART',                '4':'RESTART'}, 
-        'STEADY DELAY'              : {'1':'STEADY DELAY',           '2':'STEADY DELAY',           '4':'DELAY'},
-        'DELAY'                     : {'1':'DELAY',                  '2':'DELAY',                  '4':'DELAY'},
-        'STEADY RISING'             : {'1':'RISING',                 '2':'RISING',                 '4':'STEADY RISING'}, 
-        'RISING'                    : {'1':'RISING',                 '2':'RISING',                 '4':'RISING'},
-        'STEADY NORMAL'             : {'1':'NORMAL',                 '2':'NORMAL',                 '4':'STEADY NORMAL'},
-        'NORMAL'                    : {'1':'NORMAL',                 '2':'NORMAL',                 '4':'NORMAL'},
-        'PERSISTENT NODATA'         : {'1':'PERSISTENT NODATA',      '2':'PERSISTENT NODATA',      '4':'PERSISTENT NODATA'},
-        'PERSISTENT STEADY STOP'    : {'1':'PERSISTENT STEADY STOP', '2':'PERSISTENT STEADY STOP', '4':'STOP'},
-        'PERSISTENT STOP'           : {'1':'PERSISTENT STOP',        '2':'PERSISTENT STOP',        '4':'PERSISTENT STOP'},
-        'PERSISTENT STEADY RESTART' : {'1':'STEADY RESTART',         '2':'STEADY RESTART',         '4':'RESTART'},
-        'PERSISTENT RESTART'        : {'1':'PERSISTENT RESTART',     '2':'RESTART',                '4':'PERSISTENT RESTART'},
-        'PERSISTENT STEADY DELAY'   : {'1':'STEADY DELAY',           '2':'STEADY DELAY',           '4':'DELAY'},
-        'PERSISTENT DELAY'          : {'1':'PERSISTENT DELAY',       '2':'PERSISTENT DELAY',       '4':'PERSISTENT DELAY'},
-        'PERSISTENT STEADY RISING'  : {'1':'RISING',                 '2':'RISING',                 '4':'RISING'},
-        'PERSISTENT RISING'         : {'1':'PERSISTENT RISING',      '2':'RISING',                 '4':'PERSISTENT RISING'},
-        'PERSISTENT STEADY NORMAL'  : {'1':'NORMAL',                 '2':'NORMAL',                 '4':'PERSISTENT STEADY NORMAL'},
-        'PERSISTENT NORMAL'         : {'1':'PERSISTENT NORMAL',      '2':'PERSISTENT NORMAL',      '4':'PERSISTENT NORMAL'}
+        'NO DATA'                   : {'4':'NO DATA',                '2':'NO DATA',                '1':'NO DATA'},
+        'STEADY STOP'               : {'4':'STEADY STOP',            '2':'STEADY STOP',            '1':'STEADY STOP'},
+        'STOP'                      : {'4':'STOP',                   '2':'STOP',                   '1':'STOP'},
+        'STEADY RESTART'            : {'4':'STEADY RESTART',         '2':'RESTART',                '1':'STEADY RESTART'},
+        'RESTART'                   : {'4':'RESTART',                '2':'RESTART',                '1':'RESTART'}, 
+        'STEADY DELAY'              : {'4':'STEADY DELAY',           '2':'STEADY DELAY',           '1':'STEADY DELAY'},
+        'DELAY'                     : {'4':'DELAY',                  '2':'DELAY',                  '1':'DELAY'},
+        'STEADY RISING'             : {'4':'STEADY RISING',          '2':'RISING',                 '1':'RISING'}, 
+        'RISING'                    : {'4':'RISING',                 '2':'RISING',                 '1':'RISING'},
+        'STEADY NORMAL'             : {'4':'NORMAL',                 '2':'STEADY NORMAL',          '1':'NORMAL'},
+        'NORMAL'                    : {'4':'NORMAL',                 '2':'NORMAL',                 '1':'NORMAL'},
+        'PERSISTENT NODATA'         : {'4':'PERSISTENT NODATA',      '2':'PERSISTENT NODATA',      '1':'PERSISTENT NODATA'},
+        'PERSISTENT STEADY STOP'    : {'4':'PERSISTENT STEADY STOP', '2':'STEADY STOP',            '1':'STEADY STOP'},
+        'PERSISTENT STOP'           : {'4':'PERSISTENT STOP',        '2':'STOP',                   '1':'PERSISTENT STOP'},
+        'PERSISTENT STEADY RESTART' : {'4':'STEADY RESTART',         '2':'RESTART',                '1':'RESTART'},
+        'PERSISTENT RESTART'        : {'4':'PERSISTENT RESTART',     '2':'RESTART',                '1':'PERSISTENT RESTART'},
+        'PERSISTENT STEADY DELAY'   : {'4':'STEADY DELAY',           '2':'STEADY DELAY',           '1':'STEADY DELAY'},
+        'PERSISTENT DELAY'          : {'4':'DELAY',                  '2':'DELAY',                  '1':'PERSISTENT DELAY'},
+        'PERSISTENT STEADY RISING'  : {'4':'STEADY RISING',          '2':'RISING',                 '1':'RISING'},
+        'PERSISTENT RISING'         : {'4':'RISING',                 '2':'RISING',                 '1':'RISING'},
+        'PERSISTENT STEADY NORMAL'  : {'4':'NORMAL',                 '2':'STEADY NORMAL',          '1':'NORMAL'},
+        'PERSISTENT NORMAL'         : {'4':'NORMAL',                 '2':'NORMAL',                 '1':'NORMAL'}
     }
     return status_maps[status_name(status_id)][machine_id]
 
@@ -88,7 +88,7 @@ def load_with_shift(machine_id, first_year=2018, first_month=11, first_day=1):
             # velocity = row[4].replace('NaN', '0')
             if(row[2] in ['NaN', '1', '12']): # SKIP NO DATA!!!
                 continue
-            rows.append(dict(zip(fields, [*row[0:2], status_name(row[2]), date_shift])))
+            rows.append(dict(zip(fields, [*row[0:2], get_adjusted_status(machine_id, row[2]), date_shift])))
 
     return rows
 
