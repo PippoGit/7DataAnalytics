@@ -52,7 +52,7 @@ def get_adjusted_status(machine_id, status_id):
         'PERSISTENT DELAY'          : {'1':'PERSISTENT DELAY',       '2':'PERSISTENT DELAY',       '4':'PERSISTENT DELAY'},
         'PERSISTENT STEADY RISING'  : {'1':'RISING',                 '2':'RISING',                 '4':'RISING'},
         'PERSISTENT RISING'         : {'1':'PERSISTENT RISING',      '2':'PERSISTENT RISING',      '4':'PERSISTENT RISING'},
-        'PERSISTENT STEADY NORMAL'  : {'1':'NORMAL',                 '2':'NORMAL',                 '4':'NORMAL'},
+        'PERSISTENT STEADY NORMAL'  : {'1':'NORMAL',                 '2':'NORMAL',                 '4':'PERSISTENT STEADY NORMAL'},
         'PERSISTENT NORMAL'         : {'1':'PERSISTENT NORMAL',      '2':'PERSISTENT NORMAL',      '4':'PERSISTENT NORMAL'}
     }
     return status_maps[status_name(status_id)][machine_id]
