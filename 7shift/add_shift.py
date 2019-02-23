@@ -26,10 +26,8 @@ def load_fplog_for_shift(machine_id, shift):
 
 
 def status_name(id):
-    if (id == 'NaN'): 
-        return 'NO DATA'
     names = ['NO DATA', 'STEADY STOP', 'STOP', 'STEADY RESTART', 'RESTART', 'STEADY DELAY', 'DELAY', 'STEADY RISING', 'RISING', 'STEADY NORMAL', 'NORMAL', 'PERSISTENT NODATA', 'PERSISTENT STEADY STOP', 'PERSISTENT STOP', 'PERSISTENT STEADY RESTART', 'PERSISTENT RESTART', 'PERSISTENT STEADY DELAY', 'PERSISTENT DELAY', 'PERSISTENT STEADY RISING', 'PERSISTENT RISING', 'PERSISTENT STEADY NORMAL', 'PERSISTENT NORMAL']
-    return names[int(id)-1]
+    return 'NO DATA' if id is 'NaN' else names[int(id)-1]
 
 
 def get_adjusted_status(machine_id, status_id):
