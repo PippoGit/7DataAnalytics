@@ -76,9 +76,7 @@ def load_with_shift(machine_id, first_year=2018, first_month=11, first_day=1):
     with open(input_file, 'r') as csv_file:
         reader = csv.reader(csv_file, delimiter=',', quotechar='"')
         next(reader)
-        for row in reader:
-            if(row[2] in ['NaN', '1', '12']): # SKIP NO DATA!!!
-                continue
+        for row in [r for r in reader if r[2] not in ['NaN', '1', '12']]: # Skip NoData
             # Get date for i-th entry
             currdate = datetime.datetime.strptime(row[0], "%Y-%m-%dT%H:%M:%S")
             # evaluate the right shift value (1 => 06->14, 2 => 14->22, 3 => 22->06)
@@ -89,7 +87,6 @@ def load_with_shift(machine_id, first_year=2018, first_month=11, first_day=1):
             date_shift = str(working_date).zfill(3)+ "_" + str(shift)
             # put all together and map the status to the correct one
             rows.append(dict(zip(fields, [*row[0:2], get_adjusted_status(machine_id, row[2]), date_shift])))
-
     return rows
 
 
@@ -121,7 +118,10 @@ def main():
         log = load_with_shift(machine)
         write_log(machine, log)
     
+    load_fplog_for_shift("1", ["004_2", "004_3", "007_3", "016_3", "023_3", "005_3", "006_3", "018_2", "021_3", "024_2"])
     load_fplog_for_shift("2", ["001_2", "006_2", "007_1", "007_2", "010_3", "014_1", "018_1", "024_3", "026_2", "030_2"])
+    load_fplog_for_shift("4", ["007_1", "010_2", "012_1", "014_1", "016_2", "016_3", "019_1", "019_3", "021_1", "030_1"])
+    
     return 0
 
 
