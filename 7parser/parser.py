@@ -19,17 +19,6 @@ def load_fplog(input_file):
     return sorted(rows, key=lambda k: k['timestamp'])
 
 
-# **** kinda useless 
-def time2secs(t):
-    """
-    convert timestamp to seconds (starting from 1)
-
-    :param t: timestamp HH:MM:SS
-    """
-    return sum(int(x)*60**pow for pow, x in enumerate(t.split(':')[::-1]))
-# *****
-
-
 def should_write(row, sel_dates=None, sel_fields=None, sel_machines=None):
     """
     Returns true if the row should be written on the new log
