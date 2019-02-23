@@ -6,20 +6,18 @@ def load_fplog_for_shift(machine_id, shift):
     input_file = "machine" + machine_id + ".csv"
     fields = ["TIMESTAMP", "NODATA", "STATUS", "DATE_SHIFT"]
     output_file = "machine" + machine_id + "best_shift_log.csv"
+    shift = [shift] if type(shift) is not list else shift
     rows = []
 
     with open(input_file, 'r') as csv_file:
         reader = csv.reader(csv_file, delimiter=',', quotechar='"')
         next(reader)
-        for row in reader:
-            if row[3] in shift:
-                rows.append(row)
+        rows.append(row for row in [r for r in reader if r[3] in shift])
 
     with open(output_file, "w") as csv_file:
         writer = csv.writer(csv_file, quoting=csv.QUOTE_NONNUMERIC)
         writer.writerow(fields)
-        for row in rows:
-            writer.writerow(row)
+        writer.writerow(row for row in rows)
 
     print("\nLog created!\nPath: " + os.getcwd() + os.sep + output_file + "\n")
     return rows
@@ -27,7 +25,7 @@ def load_fplog_for_shift(machine_id, shift):
 
 def status_name(id):
     names = ['NO DATA', 'STEADY STOP', 'STOP', 'STEADY RESTART', 'RESTART', 'STEADY DELAY', 'DELAY', 'STEADY RISING', 'RISING', 'STEADY NORMAL', 'NORMAL', 'PERSISTENT NODATA', 'PERSISTENT STEADY STOP', 'PERSISTENT STOP', 'PERSISTENT STEADY RESTART', 'PERSISTENT RESTART', 'PERSISTENT STEADY DELAY', 'PERSISTENT DELAY', 'PERSISTENT STEADY RISING', 'PERSISTENT RISING', 'PERSISTENT STEADY NORMAL', 'PERSISTENT NORMAL']
-    return 'NO DATA' if id is 'NaN' else names[int(id)-1]
+    return names[0] if id is 'NaN' else names[int(id)-1]
 
 
 def get_adjusted_status(machine_id, status_id):
